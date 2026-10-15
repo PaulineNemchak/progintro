@@ -35,3 +35,19 @@ begin
     for k := n downto 1 do
         PrintLineOfDiamond(k, n);
 end.
+
+{
+procedure powers(x: real; var quad, cube, fourth, fifth: real);
+begin
+    quad := x * x;
+    cube := quad * x;
+    fourth := cube * x;
+    fifth := fourth * x
+end;
+var — can be changed from the inside of procedure
+
+var
+    p, q, r, t: real;
+begin
+    powers(17.5, p, q, r, t);
+}
