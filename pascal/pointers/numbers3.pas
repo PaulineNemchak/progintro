@@ -1,4 +1,5 @@
 program Numbers3;
+{ insert left in the beginning of the list}
 type
     item2ptr = ^item2;
     item2 = record
@@ -6,34 +7,23 @@ type
         prev, next: item2ptr;
     end;
 var
-    first, tmp, last, current: item2ptr;
+    first, tmp, last: item2ptr;
     n: integer;
 begin
     first := nil;
     last := nil;
-    current := first;
 
     while not SeekEof do begin
         read(n);
         new(tmp);
         tmp^.data := n;
-
-        if current = nil then begin
-            tmp^.prev := nil;
-            tmp^.next := nil;
-            first := tmp;
-            last := tmp;
-        end else begin
-            tmp^.prev := current^.prev;
-            tmp^.next := current;
-            if current^.prev = nil then
-                first := tmp
-            else
-                current^.prev^.next := tmp;
-            current^.prev := tmp;
-        end;
-
-        current := first;
+        tmp^.prev := nil;
+        tmp^.next := first;
+        if first = nil then
+            last := tmp
+        else
+            first^.prev := tmp;
+        first := tmp;
     end;
 
     tmp := first;
@@ -50,20 +40,56 @@ begin
 end.
 
 {
-    insert right:
+    insert left general:
     new(tmp);
-    tmp^.prev := current;
-    tmp^.next := current^.next;
+    if current = nil then
+        tmp^.prev := last
+    else
+        tmp^.prev := current^.prev;
+    tmp^.next := current;
     tmp^.data := n;
-    if current^.next = nil then
+    if tmp^.prev = nil then
+        first := tmp
+    else
+        tmp^.prev^.next := tmp;
+    if tmp^.next = nil then
         last := tmp
     else
-        current^.next^.prev := tmp;
-    current^.next := tmp;
+        tmp^.next^.prev := tmp;
+}
+{
+    insert right in the end of the list:
+    new(tmp);
+    tmp^.data := n;
+    tmp^.prev := last;
+    tmp^.next := nil;
+    if last = nil then
+    first := tmp
+        else
+    last^.next := tmp;
+        last := tmp;
+}
+{
+    insert right general:
+    new(tmp);
+    tmp^.prev := current;
+    if current = nil then
+        tmp^.next := first
+    else
+        tmp^.next := current^.next;
+    tmp^.data := n;
+    if tmp^.prev = nil then
+        first := tmp
+    else
+        tmp^.prev^.next := tmp;
+    if tmp^.next = nil then
+        last := tmp
+    else
+        tmp^.next^.prev := tmp;
 }
 
 {
-    delete:
+    delete general:
     if current^.prev = nil then
         first := current^.next
     else
